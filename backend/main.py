@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from datetime import datetime
-
+from backend.app.models.request_models import CodeReviewRequest
 app = FastAPI(
     title="SecureReview-AI",
     version="0.1.0",
@@ -43,4 +43,13 @@ def developer():
             "Docker",
             "Artificial Intelligence"
         ]
+    }
+@app.post("/review")
+def review_code(request: CodeReviewRequest):
+    return {
+        "status": "received",
+        "developer": request.developer,
+        "language": request.language,
+        "filename": request.filename,
+        "message": "Source code received successfully."
     }
