@@ -1,6 +1,8 @@
 from fastapi import FastAPI
+from fastapi import UploadFile, File
 from datetime import datetime
 from backend.app.models.request_models import CodeReviewRequest
+import os
 app = FastAPI(
     title="SecureReview-AI",
     version="0.1.0",
@@ -52,4 +54,20 @@ def review_code(request: CodeReviewRequest):
         "language": request.language,
         "filename": request.filename,
         "message": "Source code received successfully."
+    }
+@app.post("/upload")
+async def upload_file(file: UploadFile = File(...)):
+
+    os.makedirs("uploads", exist_ok=True)
+
+    file_path = f"uploads/{file.filename}"
+
+    with open(file_path, "wb") as buffer:
+        buffer.write(await file.read())
+
+    return {
+        "message": "File uploaded successfully",
+        "filename": file.filename,
+        "content_type": file.content_type,
+        "saved_to": file_path
     }
