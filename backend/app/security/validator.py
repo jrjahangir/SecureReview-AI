@@ -1,6 +1,7 @@
 from pathlib import Path
 from fastapi import HTTPException
 
+
 ALLOWED_EXTENSIONS = {
     ".java",
     ".py",
@@ -22,3 +23,13 @@ def validate_extension(filename: str):
         )
 
     return extension
+
+MAX_FILE_SIZE = 5 * 1024 * 1024   # 5 MB
+
+def validate_file_size(file_bytes: bytes):
+
+    if len(file_bytes) > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=400,
+            detail="File exceeds maximum allowed size (5 MB)."
+        )

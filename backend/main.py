@@ -1,21 +1,14 @@
-from fastapi import FastAPI
-from fastapi import UploadFile, File
-from fastapi import HTTPException
-from pathlib import Path
-from datetime import datetime
-from backend.app.models.request_models import CodeReviewRequest
 import os
 import uuid
+from fastapi import FastAPI, File, UploadFile
+from datetime import datetime
+from backend.app.models.request_models import CodeReviewRequest
+from backend.app.security.validator import ( 
+        validate_extension , 
+        validate_file_size,
+        )
+from backend.app.security.hashing import calculate_sha256
 
-ALLOWED_EXTENSIONS = {
-    ".java",
-    ".py",
-    ".php",
-    ".js",
-    ".cs",
-    ".html",
-    ".xml"
-}
 app = FastAPI(
     title="SecureReview-AI",
     version="0.1.0",
@@ -71,13 +64,7 @@ def review_code(request: CodeReviewRequest):
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
 
-    extension = Path(file.filename).suffix.lower()
-
-    if extension not in ALLOWED_EXTENSIONS:
-        raise HTTPException(
-            status_code=400,
-            detail=f"File type '{extension}' is not allowed."
-        )
+    extension = validate_extension(file.filename)
 
     os.makedirs("uploads", exist_ok=True)
 
@@ -85,12 +72,19 @@ async def upload_file(file: UploadFile = File(...)):
 
     file_path = os.path.join("uploads", unique_filename)
 
+    file_bytes = await file.read()
+
+    validate_file_size(file_bytes)
+
+    file_hash = calculate_sha256(file_bytes)
+
     with open(file_path, "wb") as buffer:
-        buffer.write(await file.read())
+        buffer.write(file_bytes)
 
     return {
         "message": "File uploaded successfully",
         "original_filename": file.filename,
         "saved_filename": unique_filename,
-        "content_type": file.content_type
+        "content_type": file.content_type,
+        "sha256": file_hash
     }
