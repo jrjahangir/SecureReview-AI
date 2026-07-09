@@ -1,13 +1,15 @@
-import os
-import uuid
 from fastapi import FastAPI, File, UploadFile
 from datetime import datetime
+import os
+import uuid
 from backend.app.models.request_models import CodeReviewRequest
 from backend.app.security.validator import ( 
-        validate_extension , 
+        validate_extension, 
         validate_file_size,
         )
 from backend.app.security.hashing import calculate_sha256
+from backend.app.analyzer.codeanalyzer import analyze_source_code
+
 
 app = FastAPI(
     title="SecureReview-AI",
@@ -76,6 +78,10 @@ async def upload_file(file: UploadFile = File(...)):
 
     validate_file_size(file_bytes)
 
+    source_code = file_bytes.decode("utf-8", errors="replace")
+
+    findings = analyze_source_code(source_code)
+
     file_hash = calculate_sha256(file_bytes)
 
     with open(file_path, "wb") as buffer:
@@ -86,5 +92,6 @@ async def upload_file(file: UploadFile = File(...)):
         "original_filename": file.filename,
         "saved_filename": unique_filename,
         "content_type": file.content_type,
-        "sha256": file_hash
+        "sha256": file_hash,
+        "findings": findings
     }
