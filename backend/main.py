@@ -9,6 +9,7 @@ from backend.app.security.validator import (
         )
 from backend.app.security.hashing import calculate_sha256
 from backend.app.analyzer.codeanalyzer import analyze_source_code
+from backend.app.analyzer.risk_engine import calculate_risk
 
 app = FastAPI(
     title="SecureReview-AI",
@@ -80,6 +81,8 @@ async def upload_file(file: UploadFile = File(...)):
     source_code = file_bytes.decode("utf-8", errors="replace")
 
     findings = analyze_source_code(source_code)
+    
+    risk = calculate_risk(findings)
 
     file_hash = calculate_sha256(file_bytes)
 
@@ -87,10 +90,13 @@ async def upload_file(file: UploadFile = File(...)):
         buffer.write(file_bytes)
 
     return {
-        "message": "File uploaded successfully",
-        "original_filename": file.filename,
-        "saved_filename": unique_filename,
-        "content_type": file.content_type,
-        "sha256": file_hash,
-        "findings": findings
-    }
+    "message": "File uploaded successfully",
+    "original_filename": file.filename,
+    "saved_filename": unique_filename,
+    "content_type": file.content_type,
+    "sha256": file_hash,
+    "risk_score": risk["score"],
+    "risk_level": risk["level"],
+    "summary": risk["summary"],
+    "findings": findings
+}
