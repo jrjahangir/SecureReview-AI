@@ -10,7 +10,6 @@ from backend.app.security.validator import (
 from backend.app.security.hashing import calculate_sha256
 from backend.app.analyzer.codeanalyzer import analyze_source_code
 
-
 app = FastAPI(
     title="SecureReview-AI",
     version="0.1.0",
