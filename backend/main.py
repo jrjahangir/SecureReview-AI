@@ -11,6 +11,7 @@ from backend.app.security.hashing import calculate_sha256
 from backend.app.analyzer.codeanalyzer import analyze_source_code
 from backend.app.analyzer.risk_engine import calculate_risk
 from backend.app.ai.aiservice import analyze_with_ai
+from backend.report.reportgenerator import generate_report
 
 app = FastAPI(
     title="SecureReview-AI",
@@ -79,28 +80,38 @@ async def upload_file(file: UploadFile = File(...)):
 
     validate_file_size(file_bytes)
 
-    source_code = file_bytes.decode("utf-8", errors="replace")
-
-    findings = analyze_source_code(source_code)
-    
-    ai_result = analyze_with_ai(source_code)
-    
-    risk = calculate_risk(findings)
-
     file_hash = calculate_sha256(file_bytes)
 
     with open(file_path, "wb") as buffer:
         buffer.write(file_bytes)
 
-    return {
-    "message": "File uploaded successfully",
-    "original_filename": file.filename,
-    "saved_filename": unique_filename,
-    "content_type": file.content_type,
-    "sha256": file_hash,
-    "risk_score": risk["score"],
-    "risk_level": risk["level"],
-    "summary": risk["summary"],
-    "findings": findings,
-    "ai_analysis": ai_result
-}
+    source_code = file_bytes.decode("utf-8", errors="replace")
+
+    findings = analyze_source_code(source_code)
+
+    risk = calculate_risk(findings)
+
+    ai_result = analyze_with_ai(source_code)
+
+    report = generate_report(
+        file.filename,
+        file_hash,
+        risk,
+        findings,
+        ai_result
+    )
+
+    return report
+    
+ #  return {
+ #  "message": "File uploaded successfully",
+ #  "original_filename": file.filename,
+ #  "saved_filename": unique_filename,
+ #  "content_type": file.content_type,
+ #  "sha256": file_hash,
+ #  "risk_score": risk["score"],
+ #  "risk_level": risk["level"],
+ #  "summary": risk["summary"],
+ #  "findings": findings,
+ # "ai_analysis": ai_result
+ # } 
