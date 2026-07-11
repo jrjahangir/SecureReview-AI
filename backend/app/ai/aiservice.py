@@ -1,3 +1,4 @@
+import json
 import requests
 
 from backend.app.ai.prompt_builder import build_prompt
@@ -18,7 +19,19 @@ def analyze_with_ai(source_code):
 
     result = response.json()
 
-    return {
-        "model": "llama3.2:3b",
-        "analysis": result["response"]
-    }
+    ai_text = result.get("response", "").strip()
+
+    try:
+        parsed = json.loads(ai_text)
+
+        return {
+            "model": "llama3.2:3b",
+            "analysis": parsed
+        }
+
+    except json.JSONDecodeError:
+
+        return {
+            "model": "llama3.2:3b",
+            "analysis": ai_text
+        }

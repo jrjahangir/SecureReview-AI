@@ -1,26 +1,35 @@
 def build_prompt(source_code: str):
 
-    prompt = f"""
+    return f"""
 You are a Senior Application Security Engineer.
 
 Review the following source code.
 
-Identify:
+Return ONLY valid JSON.
 
-1. SQL Injection
-2. XSS
-3. Hardcoded Secrets
-4. Authentication Issues
-5. Authorization Issues
-6. Weak Cryptography
-7. Input Validation Problems
-8. OWASP Top 10 Risks
+Use exactly this format:
 
-Return your findings as concise bullet points.
+{{
+  "overall_risk": "",
+  "issues":[
+    {{
+      "severity":"",
+      "type":"",
+      "cwe":"",
+      "owasp":"",
+      "recommendation":""
+    }}
+  ]
+}}
+
+Rules:
+
+- No markdown
+- No explanations outside JSON
+- Return valid JSON only
+- If no issue exists, return an empty issues array.
 
 Source Code:
 
 {source_code}
 """
-
-    return prompt
