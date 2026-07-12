@@ -1,5 +1,5 @@
 {
-    "generated_at": "2026-07-12T17:18:23.646964",
+    "generated_at": "2026-07-12T17:57:06.951846",
     "filename": "FSecurityTest.java",
     "sha256": "cb973c7ad5abb9c32ed6b085edbb65096cd2bc7022eeff3ad8d8b726b482ad3f",
     "risk_score": 90,
@@ -42,22 +42,8 @@
                     "severity": "Critical",
                     "type": "SQL Injection",
                     "cwe": "CWE-89",
-                    "owasp": "A01:2017",
-                    "recommendation": "Use prepared statements to prevent SQL injection attacks"
-                },
-                {
-                    "severity": "High",
-                    "type": "Weak Password Storage",
-                    "cwe": "CWE-321",
-                    "owasp": "A04:2005",
-                    "recommendation": "Store passwords securely using a salted hashing algorithm"
-                },
-                {
-                    "severity": "Medium",
-                    "type": "Insecure API Key Usage",
-                    "cwe": "CWE-306",
-                    "owasp": "A13:2017",
-                    "recommendation": "Use environment variables or secure storage mechanisms for sensitive data like API keys"
+                    "owasp": "A7.5",
+                    "recommendation": "Use prepared statements to prevent SQL injection"
                 }
             ]
         }

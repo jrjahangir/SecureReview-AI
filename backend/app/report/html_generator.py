@@ -1,6 +1,27 @@
 from datetime import datetime
 
 
+def count_severity(items):
+    """
+    Count findings by severity.
+    """
+
+    result = {
+        "Critical": 0,
+        "High": 0,
+        "Medium": 0,
+        "Low": 0
+    }
+
+    for item in items:
+        severity = item["severity"].capitalize()
+
+        if severity in result:
+            result[severity] += 1
+
+    return result
+
+
 def generate_html_report(
     filename,
     sha256,
@@ -8,6 +29,41 @@ def generate_html_report(
     findings,
     ai_result
 ):
+    """
+    Generate HTML Security Report.
+    """
+
+    generated_time = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+    static_total = len(findings)
+    ai_total = len(ai_result["analysis"]["issues"])
+
+    static_summary = count_severity(findings)
+    ai_summary = count_severity(
+        ai_result["analysis"]["issues"]
+    )
+
+    total_critical = (
+        static_summary["Critical"] +
+        ai_summary["Critical"]
+    )
+
+    total_high = (
+        static_summary["High"] +
+        ai_summary["High"]
+    )
+
+    total_medium = (
+        static_summary["Medium"] +
+        ai_summary["Medium"]
+    )
+
+    total_low = (
+        static_summary["Low"] +
+        ai_summary["Low"]
+    )
 
     html = f"""
 <!DOCTYPE html>
@@ -113,9 +169,62 @@ td {{
 
 <p><b>Filename:</b> {filename}</p>
 
-<p><b>Generated:</b> {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
+<p><b>Generated:</b> {generated_time}</p>
 
 <p><b>SHA256:</b> {sha256}</p>
+
+<hr>
+
+<h3>Executive Summary</h3>
+
+<table>
+
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+
+<tr>
+<td>Overall Risk</td>
+<td>{risk["level"]}</td>
+</tr>
+
+<tr>
+<td>Risk Score</td>
+<td>{risk["score"]}/100</td>
+</tr>
+
+<tr>
+<td>Static Findings</td>
+<td>{static_total}</td>
+</tr>
+
+<tr>
+<td>AI Findings</td>
+<td>{ai_total}</td>
+</tr>
+
+<tr>
+<td>Total Critical</td>
+<td>{total_critical}</td>
+</tr>
+
+<tr>
+<td>Total High</td>
+<td>{total_high}</td>
+</tr>
+
+<tr>
+<td>Total Medium</td>
+<td>{total_medium}</td>
+</tr>
+
+<tr>
+<td>Total Low</td>
+<td>{total_low}</td>
+</tr>
+
+</table>
 
 <hr>
 
@@ -149,6 +258,7 @@ td {{
 """
 
     # Static Findings
+
     for finding in findings:
 
         severity = finding["severity"]
@@ -172,8 +282,7 @@ td {{
 </tr>
 """
 
-    html += f"""
-
+    html += """
 </table>
 
 <hr>
@@ -181,15 +290,12 @@ td {{
 <h3>AI Analysis</h3>
 
 <p>
+"""
 
-<b>Model:</b> {ai_result["model"]}
+    html += f"""
+<b>Model:</b> {ai_result["model"]}<br><br>
 
-</p>
-
-<p>
-
-<b>Overall Risk:</b>
-{ai_result["analysis"]["overall_risk"]}
+<b>Overall Risk:</b> {ai_result["analysis"]["overall_risk"]}
 
 </p>
 
@@ -207,6 +313,7 @@ td {{
 """
 
     # AI Findings
+
     for issue in ai_result["analysis"]["issues"]:
 
         severity = issue["severity"]
@@ -250,11 +357,9 @@ AI-Powered Static & Intelligent Security Code Review Platform<br><br>
 
 Version: <b>0.1.0</b><br>
 
-Generated:
-{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}<br>
+Generated: {generated_time}<br>
 
-AI Model:
-<b>{ai_result["model"]}</b><br><br>
+AI Model: <b>{ai_result["model"]}</b><br><br>
 
 Developed by<br>
 
