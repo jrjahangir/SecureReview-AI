@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>SecureReview-AI Report</title>
+
+<style>
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f7fa;
+    margin: 30px;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #cccccc;
+}
+
+h1 {
+    color: #0b5394;
+}
+
+h2 {
+    color: #444;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+th {
+    background: #0b5394;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.high {
+    color: red;
+    font-weight: bold;
+}
+
+.medium {
+    color: orange;
+    font-weight: bold;
+}
+
+.low {
+    color: green;
+    font-weight: bold;
+}
+
+.critical {
+    color: darkred;
+    font-weight: bold;
+}
+
+.info {
+    color: blue;
+    font-weight: bold;
+}
+
+.footer {
+    margin-top: 40px;
+    padding-top: 15px;
+    border-top: 2px solid #0b5394;
+    color: #666;
+    font-size: 14px;
+    text-align: center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>SecureReview-AI</h1>
+
+<h2>Security Assessment Report</h2>
+
+<hr>
+
+<h3>General Information</h3>
+
+<p><b>Filename:</b> FSecurityTest.java</p>
+
+<p><b>Generated:</b> 2026-07-12 17:18:23</p>
+
+<p><b>SHA256:</b> cb973c7ad5abb9c32ed6b085edbb65096cd2bc7022eeff3ad8d8b726b482ad3f</p>
+
+<hr>
+
+<h3>Risk Summary</h3>
+
+<table>
+
+<tr>
+<th>Risk Score</th>
+<th>Risk Level</th>
+</tr>
+
+<tr>
+<td>90</td>
+<td>Very Critical</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h3>Static Analysis Findings</h3>
+
+<table>
+
+<tr>
+<th>Severity</th>
+<th>Issue</th>
+<th>Recommendation</th>
+</tr>
+
+<tr>
+
+<td class="high">
+High
+</td>
+
+<td>
+Potential SQL Injection
+</td>
+
+<td>
+Use parameterized queries.
+</td>
+
+</tr>
+
+<tr>
+
+<td class="medium">
+Medium
+</td>
+
+<td>
+Sensitive Information Exposure
+</td>
+
+<td>
+Avoid exposing passwords.
+</td>
+
+</tr>
+
+<tr>
+
+<td class="high">
+High
+</td>
+
+<td>
+Hardcoded Secret
+</td>
+
+<td>
+Store secrets securely using environment variables or a secrets manager.
+</td>
+
+</tr>
+
+<tr>
+
+<td class="medium">
+Medium
+</td>
+
+<td>
+Weak Cryptography
+</td>
+
+<td>
+Use SHA-256 or stronger hashing algorithms.
+</td>
+
+</tr>
+
+
+</table>
+
+<hr>
+
+<h3>AI Analysis</h3>
+
+<p>
+
+<b>Model:</b> llama3.2:3b
+
+</p>
+
+<p>
+
+<b>Overall Risk:</b>
+High
+
+</p>
+
+<table>
+
+<tr>
+
+<th>Severity</th>
+<th>Issue</th>
+<th>CWE</th>
+<th>OWASP</th>
+<th>Recommendation</th>
+
+</tr>
+
+<tr>
+
+<td class="critical">
+Critical
+</td>
+
+<td>
+SQL Injection
+</td>
+
+<td>
+CWE-89
+</td>
+
+<td>
+A01:2017
+</td>
+
+<td>
+Use prepared statements to prevent SQL injection attacks
+</td>
+
+</tr>
+
+<tr>
+
+<td class="high">
+High
+</td>
+
+<td>
+Weak Password Storage
+</td>
+
+<td>
+CWE-321
+</td>
+
+<td>
+A04:2005
+</td>
+
+<td>
+Store passwords securely using a salted hashing algorithm
+</td>
+
+</tr>
+
+<tr>
+
+<td class="medium">
+Medium
+</td>
+
+<td>
+Insecure API Key Usage
+</td>
+
+<td>
+CWE-306
+</td>
+
+<td>
+A13:2017
+</td>
+
+<td>
+Use environment variables or secure storage mechanisms for sensitive data like API keys
+</td>
+
+</tr>
+
+
+</table>
+
+<div class="footer">
+
+<b>SecureReview-AI</b><br><br>
+
+AI-Powered Static & Intelligent Security Code Review Platform<br><br>
+
+Version: <b>0.1.0</b><br>
+
+Generated:
+2026-07-12 17:18:23<br>
+
+AI Model:
+<b>llama3.2:3b</b><br><br>
+
+Developed by<br>
+
+<b>Md. Jahangir Hossain</b><br>
+
+Information Security Architect<br><br>
+
+© 2026 SecureReview-AI. All Rights Reserved.
+
+</div>
+
+</div>
+
+</body>
+
+</html>

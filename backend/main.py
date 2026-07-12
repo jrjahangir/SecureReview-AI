@@ -11,7 +11,7 @@ from backend.app.security.hashing import calculate_sha256
 from backend.app.analyzer.codeanalyzer import analyze_source_code
 from backend.app.analyzer.risk_engine import calculate_risk
 from backend.app.ai.aiservice import analyze_with_ai
-from backend.report.reportgenerator import generate_report
+from backend.app.report.report_generator import generate_report
 
 app = FastAPI(
     title="SecureReview-AI",
